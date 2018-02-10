@@ -1,0 +1,37 @@
+<div class="ui raised segment">
+
+	<h2 class="ui header">Example Workshop</h2>
+
+	<form [formGroup]="form"
+        (ngSubmit)="onSubmit(form.value)"
+        class="ui form"
+        [class.error]="!form.valid && submitted" 
+        >
+		
+        <div class="field" 
+        	[class.error]="!form.controls['code'].valid && submitted">
+			<input type="text"
+				placeholder="code"
+				[formControl]="form.controls['code']">
+
+			<div *ngIf="submitted && form.controls['code'].hasError('code')" class="ui error message" >Code has wrong format</div>
+
+
+        </div>
+
+        <div class="field" 
+        	>
+			<input type="checkbox"
+				placeholder="code"
+				[formControl]="form.controls['selected']">
+
+			
+
+
+        </div>
+
+
+		<button type="submit" class="ui button" >Submit</button>
+		
+	</form>
+</div>

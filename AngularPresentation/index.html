@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Angular Presentation</title>
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+		<link rel="icon" type="image/x-icon" href="img/favicon.ico">
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<!--Slide 1-->
+				<section>
+					<h1>Forms & Dependency Injection</h1>
+					<h3></h3>
+					<h4 style="margin-top: 80px;">
+						By <a href="https://github.com/NeTa05/angular_training">Jorge Zavala</a>
+					</h4>
+				</section>
+
+				<!--Slide 2-->
+				<section>
+					<h2>Agenda</h2>
+					<ol>
+						<li>
+							Forms
+							<ul>
+								<li>FormControls</li>
+								<li>FormGroups</li>
+								<li>FormsModule</li>
+								<li>ReactiveFormsModule / FormBuilder</li>
+								<li>Validators</li>
+							</ul>
+						</li>
+						<li>
+							Dependency Injection
+							<ul>
+								<li>Inject a singleton instance of a class</li>
+								<li>Inject a value</li>
+							</ul>
+						</li>
+					</ol>
+				</section>
+
+				<!--Slide 3-->
+				<section>
+					<h2>Forms</h2>
+					<img width="360" height="360" src="http://javascript-coder.com/wp-content/uploads/2010/07/html-form-sample1-300x200.png">
+				</section>
+
+				<!--Slide 4-->
+				<section>
+					<!--Slide 4.1-->
+					<section>
+						<h2>FormControls</h2>
+						<ul>
+							<li>Represent a single input field</li>
+							<li>The smallest unit of an Angular Form</li>
+							<li>Encapsulate the field's value</li>
+							<li>Encapsulate states such as being valid, dirty, or has errors</li>
+						</ul>
+					</section>
+
+					<!--Slide 4.2-->
+					<section>
+						<h2>FormsControl</h2>
+						<pre>
+							<code>
+import {  FormControl } from '@angular/forms';// Remember to import
+
+let nameControl = new FormControl('Jorge');
+
+let name = nameControl.value; // -> Jorge
+
+nameControl.errors
+nameControl.dirty
+nameControl.valid
+							</code>
+						</pre>
+					</section>
+				</section>
+
+		
+
+				<!--Slide 5-->
+				<section>
+					<!--Slide 5.1-->
+					<section>
+						<h2>FormGroups</h2>
+						<ul>
+							<li>Manage multiple FormControls</li>
+							<li>A collection of FormControls</li>
+						</ul>
+					</section>
+
+					<!--Slide 5.2-->
+					<section>
+						<h2>FormGroups</h2>
+						<pre>
+							<code>
+import {  FormGroup, FormControl } from '@angular/forms'; // Remember to import
+
+let personInfo = new FormGroup({
+	firstName: new FormControl('Jorge'),
+	lastName: new FormControl('Zavala'),
+	zip: new FormControl('02445')
+})
+
+personInfo.value; // -> {
+// firstName: 'Jorge',
+// lastName: 'Zavala',
+// zip: '02445'
+// }
+							</code>
+						</pre>
+					</section>
+				</section>
+
+				
+
+				<!--Slide 6-->
+				<section>
+					<!--Slide 6.1-->
+					<section>
+						<h2>FormsModule</h2>
+						<ul>
+							<li>A way of using forms in Angular</li>
+							<li>If you import this directive, becomes active by default on all &lt;form&gt; tags</li>
+							<li>Gives us template driven directives such as : ngModel, ngForm</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>How to import FormsModule?</h2>
+						<p>Add inside import in file app.module.ts</p>
+						<pre>
+							<code>
+import { NgModule } from '@angular/core';
+import { FormsModule} from '@angular/forms';
+
+@NgModule({
+  imports: [
+    FormsModule
+  ]
+})
+export class AppModule { }
+							</code>
+						</pre>
+					</section>
+
+					<!--Slide 6.2-->
+					<section>
+						<h2>NgForm</h2>
+						<ul>
+							<li>FormsModule makes NgForm available to our view</li>
+							<li>NgForm gives us: 
+								<ol>
+									<li>A FormGroup named ngForm</li>
+									<li>A (ngSubmit) output</li>
+								</ol>
+							</li>
+						</ul>
+						<pre>
+							<code>
+&lt;form #formVariable="ngForm"
+        (ngSubmit)="onSubmit(formVariable.value)"
+        class="ui form"&gt;
+
+&lt;/form&gt;
+							</code>
+						</pre>
+					</section>
+
+					<!--Slide 6.3-->
+					<section>
+						<h2>NgModel</h2>
+						<ul>
+							<li>FormsModule makes NgModel available to our view</li>
+							<li>NgModel creates a new FormControl that is automatically added to 
+								the parent FormGroup
+							</li>
+						</ul>
+						<pre>
+							<code>
+      	&lt;input type="text"
+             placeholder="First Name"
+             name="firstName" ngModel&gt;
+							</code>
+						</pre>
+					</section>
+
+					<!--Slide 6.4-->
+					<section>
+						<h2>.Component.html</h2>
+						<pre>
+							<code>
+&lt;form #formVariable="ngForm"
+        (ngSubmit)="onSubmit(formVariable.value)"
+        class="ui form"&gt;
+
+    &lt;div class="field"&gt;
+      	&lt;label for="firstName"&gt;First Name&lt;/label&gt;
+      	&lt;input type="text"
+             placeholder="First Name"
+             name="firstName" ngModel&gt;
+    &lt;/div&gt;
+
+    &lt;button type="submit" class="ui button"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+
+							</code>
+						</pre>
+					</section>
+
+					<!--Slide 6.5-->
+					<section data-markdown>
+						<script type="text/template">
+							<h2>.Component.ts</h2>
+
+							<pre>
+								<code>
+onSubmit(form: any): void {
+	console.log('submitted' , form);
+}
+								</code>
+							</pre>
+
+						</script>
+					</section>
+					
+				</section>
+
+				
+
+				<!--Slide 7-->
+				<section>
+					<!--Slide 7.1-->
+					<section>
+						<h2>ReactiveFormsModule</h2>
+						<ul>
+							<li>A way of using forms in Angular</li>
+							<li>Gives us template driven directives such as : formControl, ngFormGroup</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>How to import ReactiveFormsModule?</h2>
+						<p>Add inside import in file app.module.ts</p>
+						<pre>
+							<code>
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule} from '@angular/forms';
+
+@NgModule({
+  imports: [
+    ReactiveFormsModule
+  ]
+})
+export class AppModule { }
+							</code>
+						</pre>
+					</section>
+
+					<section>
+						<h2>FormBuilder</h2>
+						<ul>
+							<li>More flexible way to configure forms</li>
+							<li>Gives us template driven directives such as : formControl, ngFormGroup</li>
+						</ul>
+					</section>
+						
+				</section>
+
+				<!--Slide 8-->
+				<section>
+					<section>
+						<h2>Dependency Injection</h2>
+						<img width="360" height="360" src="http://brandonclapp.com/assets/images/posts/headers/what-is-dependency-injection.jpg" alt="Meny">
+					</section>
+
+				</section>
+
+				<section>
+					<section>
+						<h2>Inject a singleton</h2>
+							<pre>
+								<code>
+import { Injectable } from '@angular/core';
+
+@Injectable()
+export class UserService {
+
+  	create(firstName: string) {
+  		//
+  	}
+}
+								</code>
+							</pre>
+					</section>
+
+					<section>
+						<h2>Allow to use globally</h2>
+							<pre>
+								<code>
+import { NgModule } from '@angular/core';
+import { UserService } from './dependency-injection/user.service';
+
+@NgModule({
+  providers: [
+    UserService
+  ]
+})
+export class AppModule { }
+
+								</code>
+							</pre>
+					</section>
+
+					<section>
+						<h2>Import to use in our component</h2>
+							<pre>
+								<code>
+import { UserService } from './user.service';
+
+export class DependencyInjectionComponent {
+
+  constructor(private userService: UserService) {
+  	let firstName = 'Jorge';
+  	this.userService.create(firstName);
+  }
+}
+								</code>
+							</pre>
+					</section>
+
+				</section>
+
+				<!--Slide 9-->
+				<section>
+					<section>
+						<h2>Inject a value</h2>
+							<pre>
+								<code>
+export const BASE_URL = 'http://localhost/services/';
+export const USERS_URL = 'users';
+								</code>
+							</pre>
+					</section>
+
+					<section>
+						<h2>Allow to use globally</h2>
+							<pre>
+								<code>
+import { NgModule } from '@angular/core';
+import { BASE_URL } from './dependency-injection/constants';
+
+@NgModule({
+  providers: [
+ 	{ provide: BASE_URL, useValue: BASE_URL },
+  ]
+})
+export class AppModule { }
+
+								</code>
+							</pre>
+					</section>
+
+					<section>
+						<h2>Import to use in our component</h2>
+							<pre>
+								<code>
+import { BASE_URL} from './constants';
+
+@Injectable()
+export class UserService {
+
+	constructor(@Inject(BASE_URL) private baseUrl) {
+
+	}
+
+  	create(firstName: string){
+  		console.log('Calling api ' + this.baseUrl);
+  	}
+}
+								</code>
+							</pre>
+					</section>
+
+				</section>
+
+				<!--Slide 10-->
+				<section>
+					<h1>Examples</h1>
+					
+
+					<img width="420" height="340" src="https://i1.wp.com/opensourceforu.com/wp-content/uploads/2016/06/Angular-JS.jpg?resize=1996%2C1124">
+					<br>
+					<a href="http://localhost:4200/forms-module" target="_blank" class="roll">
+						<span data-title="here">See here</span>
+					</a>
+					
+				</section>
+
+				<!--Slide 11-->
+				<section>
+					<h1>Questions</h1>
+					<img width="360" height="360" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRATvp0Tr5-YsIgtWxz4Z5UByEDNoHUaYOQcagKQqnHWe04iV0T_Q">
+				</section>
+
+				<!--Slide 12-->
+				<section>
+					<h1>That's all</h1>
+					<img width="360" height="360" src="http://officesupplygeek.com/wp-content/uploads/2012/12/Thanks-Pencil.jpg">
+				</section>
+				
+
+
+
+			</div>
+
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,18 @@
+<div class="ui raised segment">
+  <h2 class="ui header">FormsModule Example</h2>
+
+  <!--  #formVariable -->
+  <form #formVariable="ngForm"
+        (ngSubmit)="onSubmit(formVariable.value)"
+        class="ui form">
+
+    <div class="field">
+      <label for="firstName">First Name</label>
+      <input type="text"
+             placeholder="First Name"
+             name="firstName" ngModel>
+    </div>
+
+    <button type="submit" class="ui button">Submit</button>
+  </form>
+</div>

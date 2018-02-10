@@ -1,0 +1,27 @@
+<div class="ui raised segment">
+  <h2 class="ui header">Demo Form: with validations (explicit)</h2>
+  <form [formGroup]="myForm"
+        (ngSubmit)="onSubmit(myForm.value)"
+        class="ui form"
+        [class.error]="!myForm.valid && myForm.touched">
+
+    <div class="field"
+        [class.error]="!firstName.valid && firstName.touched">
+      <label for="firstName">First Name</label>
+      <input type="text"
+             id="firstName"
+             placeholder="firstName"
+             [formControl]="firstName"
+             required >
+       <div *ngIf="!firstName.valid"
+         class="ui error message">First Name is invalid</div>
+       <div *ngIf="firstName.hasError('required')"
+         class="ui error message">First Name is required</div>
+    </div>
+
+    <div *ngIf="!myForm.valid"
+      class="ui error message">Form is invalid</div>
+
+    <button type="submit" class="ui button">Submit</button>
+  </form>
+</div>
